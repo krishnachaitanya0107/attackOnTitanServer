@@ -1,0 +1,1 @@
+web: build/install/com.example.attackontitanserver/bin/com.example.attackontitanserver
