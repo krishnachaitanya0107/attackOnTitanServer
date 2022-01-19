@@ -11,7 +11,7 @@ import org.koin.ktor.ext.inject
 fun Route.getAllTitans() {
     val titanRepository: TitanRepository by inject()
 
-    get("/aot/heroes") {
+    get("/titans") {
         try {
             val page = call.request.queryParameters["page"]?.toInt() ?: 1
             val limit = call.request.queryParameters["limit"]?.toInt() ?: 3

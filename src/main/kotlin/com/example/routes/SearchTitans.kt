@@ -10,7 +10,7 @@ import org.koin.ktor.ext.inject
 fun Route.searchTitans() {
     val titanRepository: TitanRepository by inject()
 
-    get("/aot/titans/search") {
+    get("/titans/search") {
         val name = call.request.queryParameters["name"]
 
         val apiResponse = titanRepository.searchTitans(name = name)
