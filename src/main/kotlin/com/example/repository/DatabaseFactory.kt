@@ -26,7 +26,7 @@ object DatabaseFactory {
         val dbUri= URI(System.getenv("DATABASE_URL"))
         val username=dbUri.userInfo.split(":").toTypedArray()[0]
         val password=dbUri.userInfo.split(":").toTypedArray()[1]
-        val dbUrl="jdbc:postgresql://"+dbUri.host+":"+dbUri.port+":"+dbUri.path+"?sslmode=require"+"&user=$username&password=$password"
+        val dbUrl="jdbc:postgresql://"+dbUri.host+":"+dbUri.port+dbUri.path+"?sslmode=require"+"&user=$username&password=$password"
         config.jdbcUrl = dbUrl
         config.maximumPoolSize = 3
         config.isAutoCommit = false
