@@ -2,15 +2,19 @@ package com.example.repository
 
 import com.example.models.ApiResponse
 import com.example.models.Titan
+import com.example.models.Titans
+import com.example.repository.DatabaseFactory.dbQuery
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
+
 
 const val NEXT_PAGE_KEY = "nextPage"
 const val PREVIOUS_PAGE_KEY = "prevPage"
 
 class TitanRepositoryImpl : TitanRepository {
 
-    // get this list of titans from database
-
-    override val titans = listOf(
+    /*override var titans = listOf(
         Titan(
             id = 1,
             name = "Armored Titan",
@@ -293,15 +297,35 @@ class TitanRepositoryImpl : TitanRepository {
                 "Comrade D"
             )
         )
-    )
+    )*/
 
+    private suspend fun getAllTitansFromDb(): List<Titan> {
+        return dbQuery{
+            Titans.selectAll().map { rowToTitan(it) }
+        }
+    }
+
+    private fun rowToTitan(row: ResultRow): Titan {
+        return Titan(
+            id = row[Titans.id],
+            name = row[Titans.name],
+            abilities = stringToList(row[Titans.abilities]),
+            height = row[Titans.height],
+            image = row[Titans.image],
+            rating = row[Titans.rating],
+            about = row[Titans.about],
+            type = row[Titans.type],
+            inheritors = stringToList(row[Titans.inheritors]),
+            otherNames = stringToList(row[Titans.otherNames])
+        )
+    }
 
     private fun provideTitans(
-        heroes: List<Titan>,
+        titans: List<Titan>,
         page: Int,
         limit: Int
     ): List<Titan> {
-        val allTitans = heroes.windowed(
+        val allTitans = titans.windowed(
             size = limit,
             step = limit,
             partialWindows = true
@@ -310,8 +334,13 @@ class TitanRepositoryImpl : TitanRepository {
         return allTitans[page - 1]
     }
 
+    private fun stringToList(string: String): List<String> {
+        return string.split(",").map { it }
+    }
+
 
     override suspend fun getAllTitans(page: Int, limit: Int): ApiResponse {
+        val titans = getAllTitansFromDb()
         return ApiResponse(
             success = true,
             message = "ok",
@@ -326,7 +355,7 @@ class TitanRepositoryImpl : TitanRepository {
                 limit = limit
             )[NEXT_PAGE_KEY],
             titans = provideTitans(
-                heroes = titans,
+                titans = titans,
                 page = page,
                 limit = limit
             ),
@@ -361,11 +390,12 @@ class TitanRepositoryImpl : TitanRepository {
         )
     }
 
-    private fun findTitans(query: String?) = with(titans) {
-        if (query.isNullOrEmpty())
-            return emptyList<Titan>()
+    private suspend fun findTitans(query: String?): List<Titan> {
+        return if (query.isNullOrEmpty())
+            emptyList()
         else
-            this.filter { it.name.lowercase().contains(query.lowercase()) }
+            dbQuery { Titans.select { Titans.name.like(query) }.map { rowToTitan(it) } }
     }
+
 
 }

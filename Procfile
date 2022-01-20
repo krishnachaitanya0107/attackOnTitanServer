@@ -1,1 +1,1 @@
-web: build/install/com.example.attackontitanserver/bin/com.example.attackontitanserver
+web: java -jar build/libs/com.example.attackontitanserver-0.0.1-all.jar
