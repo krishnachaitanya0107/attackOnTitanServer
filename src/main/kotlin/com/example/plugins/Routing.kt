@@ -1,6 +1,7 @@
 package com.example.plugins
 
 import com.example.routes.getAllTitans
+import com.example.routes.insertTitan
 import com.example.routes.root
 import com.example.routes.searchTitans
 import io.ktor.routing.*
@@ -12,6 +13,7 @@ fun Application.configureRouting() {
         root()
         getAllTitans()
         searchTitans()
+        insertTitan()
 
         static("/images") {
             resources("images")
