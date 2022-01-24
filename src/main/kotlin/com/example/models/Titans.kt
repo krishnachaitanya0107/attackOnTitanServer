@@ -5,7 +5,7 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
 
 object Titans : Table() {
-    val id: Column<Int> = integer("id").autoIncrement()
+    val id: Column<Int> = integer(Constants.ID).autoIncrement()
     val name = varchar(Constants.NAME, 512)
     val image = varchar(Constants.IMAGE, 512)
     val about = varchar(Constants.ABOUT, 1024)

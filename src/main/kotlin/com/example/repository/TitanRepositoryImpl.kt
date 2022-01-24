@@ -4,10 +4,8 @@ import com.example.models.ApiResponse
 import com.example.models.Titan
 import com.example.models.Titans
 import com.example.repository.DatabaseFactory.dbQuery
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
+import com.example.utils.Constants
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
 
 
@@ -43,7 +41,10 @@ class TitanRepositoryImpl : TitanRepository {
 
     private suspend fun getAllTitansFromDb(): List<Titan> {
         return dbQuery {
-            Titans.selectAll().map { rowToTitan(it) }
+            Titans
+                .selectAll()
+                .orderBy(Titans.id to SortOrder.ASC)
+                .map { rowToTitan(it) }
         }
     }
 
@@ -144,8 +145,6 @@ class TitanRepositoryImpl : TitanRepository {
     /*private fun listToString(list: List<String>): String {
         return list.joinToString(",")
     }*/
-
-
 
 
 }
