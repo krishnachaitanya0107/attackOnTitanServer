@@ -94,7 +94,7 @@ class TitanRepositoryImpl : TitanRepository {
         return if (query.isNullOrEmpty())
             emptyList()
         else
-            dbQuery { Titans.select { Titans.name like "%$query%" }.map { rowToTitan(it) } }
+            dbQuery { Titans.select { Titans.name.lowerCase() like "%${query.lowercase()}%" }.map { rowToTitan(it) } }
     }
 
 
