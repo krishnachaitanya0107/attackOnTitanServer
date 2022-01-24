@@ -4,7 +4,6 @@ import com.example.models.ApiResponse
 import com.example.models.Titan
 import com.example.models.Titans
 import com.example.repository.DatabaseFactory.dbQuery
-import com.example.utils.Constants
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
 
@@ -95,7 +94,7 @@ class TitanRepositoryImpl : TitanRepository {
         return if (query.isNullOrEmpty())
             emptyList()
         else
-            dbQuery { Titans.select { Titans.name.like(query) }.map { rowToTitan(it) } }
+            dbQuery { Titans.select { Titans.name.lowerCase() eq query.lowercase() }.map { rowToTitan(it) } }
     }
 
 
