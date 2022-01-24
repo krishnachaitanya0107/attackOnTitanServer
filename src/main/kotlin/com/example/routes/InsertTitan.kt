@@ -1,8 +1,8 @@
 package com.example.routes
 
 import com.example.models.ApiResponse
-import com.example.models.Titan
 import com.example.repository.TitanRepository
+import com.example.utils.Constants
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
@@ -14,25 +14,33 @@ fun Route.insertTitan() {
 
     post("/titans/add") {
         try {
-            val name = call.request.queryParameters["name"]!!
-            val type = call.request.queryParameters["type"]!!
-            val image = call.request.queryParameters["image"]!!
-            val about = call.request.queryParameters["about"]!!
-            val inheritors = call.request.queryParameters["inheritors"]!!
-            val abilities = call.request.queryParameters["abilities"]!!
-            val otherNames = call.request.queryParameters["otherNames"]!!
-            val height = call.request.queryParameters["height"]?.toInt() ?: 0
-            val rating = call.request.queryParameters["rating"]?.toDouble() ?: 0.0
-
+            val name = call.request.queryParameters[Constants.NAME]!!
+            val type = call.request.queryParameters[Constants.TYPE]!!
+            val image = generateImagePath(name)
+            val about = call.request.queryParameters[Constants.ABOUT]!!
+            val inheritors = call.request.queryParameters[Constants.INHERITORS]!!
+            val abilities = call.request.queryParameters[Constants.ABILITIES]!!
+            val otherNames = call.request.queryParameters[Constants.OTHER_NAMES]!!
+            val height = call.request.queryParameters[Constants.HEIGHT]?.toInt() ?: 0
+            val rating = call.request.queryParameters[Constants.RATING]?.toDouble() ?: 0.0
 
             val apiResponse = titanRepository.insertTitan(
                 name, image, about, rating, height,
                 type, inheritors, abilities, otherNames
             )
-            call.respond(
-                message = if (apiResponse) "Success" else "Failure",
-                status = HttpStatusCode.OK
-            )
+
+            if (apiResponse) {
+                call.respond(
+                    message = ApiResponse(success = true, message = "Inserted data successfully"),
+                    status = HttpStatusCode.OK
+                )
+            } else {
+                call.respond(
+                    message = ApiResponse(success = true, message = "Something went wrong , Please try again"),
+                    status = HttpStatusCode.BadRequest
+                )
+            }
+
         } catch (e: Exception) {
             call.respond(
                 message = ApiResponse(success = false, message = e.localizedMessage.toString()),
@@ -40,4 +48,11 @@ fun Route.insertTitan() {
             )
         }
     }
+}
+
+fun generateImagePath(name: String): String {
+    var tempName = name.lowercase()
+    tempName = tempName.replace("titan", "")
+    tempName = tempName.replace(" ", "")
+    return "/images/${tempName}.jpg"
 }
