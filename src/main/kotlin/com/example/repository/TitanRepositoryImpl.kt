@@ -4,12 +4,10 @@ import com.example.models.ApiResponse
 import com.example.models.Titan
 import com.example.models.Titans
 import com.example.repository.DatabaseFactory.dbQuery
+import com.example.utils.Constants.NEXT_PAGE_KEY
+import com.example.utils.Constants.PREVIOUS_PAGE_KEY
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
-
-
-const val NEXT_PAGE_KEY = "nextPage"
-const val PREVIOUS_PAGE_KEY = "prevPage"
 
 class TitanRepositoryImpl : TitanRepository {
 
@@ -140,10 +138,5 @@ class TitanRepositoryImpl : TitanRepository {
 
         return statement?.insertedCount == 1
     }
-
-    /*private fun listToString(list: List<String>): String {
-        return list.joinToString(",")
-    }*/
-
 
 }

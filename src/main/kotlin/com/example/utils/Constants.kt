@@ -12,5 +12,7 @@ object Constants {
     const val INHERITORS = "inheritors"
     const val ABILITIES = "abilities"
     const val OTHER_NAMES = "otherNames"
+    const val NEXT_PAGE_KEY = "nextPage"
+    const val PREVIOUS_PAGE_KEY = "prevPage"
 
 }

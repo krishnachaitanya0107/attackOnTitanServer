@@ -12,7 +12,7 @@ import org.koin.ktor.ext.inject
 fun Route.insertTitan() {
     val titanRepository: TitanRepository by inject()
 
-    post("/titans/add") {
+    post("/titans/abc/add") {
         try {
             val name = call.request.queryParameters[Constants.NAME]!!
             val type = call.request.queryParameters[Constants.TYPE]!!
@@ -36,7 +36,7 @@ fun Route.insertTitan() {
                 )
             } else {
                 call.respond(
-                    message = ApiResponse(success = true, message = "Something went wrong , Please try again"),
+                    message = ApiResponse(success = false, message = "Something went wrong , Please try again"),
                     status = HttpStatusCode.BadRequest
                 )
             }
@@ -54,5 +54,5 @@ fun generateImagePath(name: String): String {
     var tempName = name.lowercase()
     tempName = tempName.replace("titan", "")
     tempName = tempName.replace(" ", "")
-    return "/images/${tempName}.jpg"
+    return "/images/${tempName}.png"
 }
