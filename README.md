@@ -2,7 +2,7 @@
 
 ## Usage
 
-##Get All Titans - 
+## Get All Titans - 
 Add page & limit as GET parameter to get all titans data in a paginated format (default values : page=1 and limit=3).
 Here the page param is the page number which you require and limit is the maximum number of items per page.
 Sample Request :
@@ -47,7 +47,7 @@ Sample Response :
 }
 ```
 
-##Search For Titans - 
+## Search For Titans - 
 Search for titans by providing a name as a GET parameter.
 
 Sample Request :
